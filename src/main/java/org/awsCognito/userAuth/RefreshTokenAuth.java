@@ -1,0 +1,34 @@
+package org.awsCognito.userAuth;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.InitiateAuthRequest;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.InitiateAuthResponse;
+
+public class RefreshTokenAuth {
+
+	public static void main(String[] args) {
+
+		String refreshToken = "eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBLU9BRVAifQ.Xyws5t2qFnfwxCukEjdl8w5OF8BNnIQLl6nDmc3R4_Yy8GcjpW-QWJtG14ayRWlfHdi9sVUEeuk1GFU9ebwrLp-W_xNcSYPTKosEgxROTIRjEJ0PDu14dz0fuWhao5i12MHvCMO8W9SAbT8NeghufBLxiVdA9eKNjBPzSVT_B3rCusJitwL3nOxOmNVExmnb917mrxAvdrky2j122Vodw92aElLwWHqhajENmuWf1eLv_wWO4-OErLP-FY9w_lRiIUHFZrAokIZM6WEyDzf6FXzHBjeLzPDPuLGXkH649UWjdjNzY6C4rHCGt705IjsguUmncALIiubMzw_bkMv_Vg.5OJe-DjyI2mLnF5R.EV8cNaY7ku2Qk9a8OLcqv66Q6Z38pn4JhGRzSUdvZthiUa9JpjI7cTzqAvoS1NCNmAZEhSXQbpaM8oT7m4xW4TXVu1G8PVVYD0abZr7FES4KCdz-My905e0hRgNBZQkOgf_3ewyUXP2PZEM-MSKWjuKigbdUHDPbvILdR0TyEJku_4TEk_E0GCsZ5PYPsdNIjgUyvtbQkGv3rDCud1_y3m1_7rTbO6ARlPFjVj3RSheARA1K_m2VdVIIGGqsXhkMJURNKEMXyd0-aXgbQXNcxImUSOYPCSALD4jf0MfFWLtIbR-8Pn-uGzxg6c_jWD8dZfXwA2KdR8r4Z0E5SGPoEMAU61EJieYQ1aY-An6LEpZqeHxMeqcKjigCbK_ob0vhAYsxvBeTRybsPt7MUoumgxdEBF94shHrNRh6fCEA1-DUNOFypbjgvGvjn6KKLM260jEOHvYPIVSkwgMU1EoiKGEHxHvoQ65QK5M2eQyxonpbvhnVIpQkIs8vs7_g3U-1kVed2jCFl0IOpcqGNiijRdXN5RyqRD-bianAaDfoZPezHPkk4coY8vxkUTTM5HTRgBgHqnuohsGnthWjxQ2syaY0SGKYW1Zt2I6jSkBb9mFgAIjC1EowCzFHfKVtH2QqEFneSw97R6vnga64U6YLrqtQ3qdV6qALJC3WvAjwYEtxvj1Njiilckjmc5JKnZ5pyXhGY1yRf61hzoQOo1IKYCuRJ7wo9D2gfyfPu94Z5McDwNKk4uSkGzDnXRjNk6x2FhGl01ILhreKolDDMOFiOdkeab7bhi4uPA5eVBFXVeEXkCyp_rvjPm8koFzuEYuzf--pLGbnec5tF0Fj3WKNv2vWS7mkFb4wRfwhEjkpvGPnu6Xjh9K0lJGf3qmg2UtvdieyvMu3zdyOqXCjfiAw4smscTsz-UuvKgkzDljiegXMjSu3ArZ_zzgXZedMvgImEW4S4-c3QX5spRN7ZaYNOrJaAYWygYj1XuQyFCj8jVEiv7qun_oqMVJVo3OQMLPFeLj-RLV1_bBKyCK93E0qH9c1WtbcEhEJSTmEr-6ubdpqfU1rz6PCFC8Q1exQ8AfZsEq2ww5r8LuvmfvNosRGMkWFQWis_5JczpNK07aghDfIM2snfk3QiUSN_G415HzY4ncWhpnsyp1ZAgR1p6GHXHuAqPHojmxlMkJpYTM-fKBxwocH3Y8Q_GO7uXcDWC-JZPOHdVWMqKXlvK_EiGD9M1Q6IJsoErD3bamCrL8qOL1dONpIjCwJGm-sAvEwKsYSrHR21v8.3pDtTc3dlvtmD_2owK67MA";
+		String secretHash = "AH8nnY64fn7mJdVp27zqTq/leKMNEpZPXNTnd+4TsaY=";
+		getToken(refreshToken, secretHash);
+	}
+
+	public static void getToken(String refreshToken, String secretHash) {
+
+		CognitoIdentityProviderClient cognitoClient = CognitoIdentityProviderClient.builder().region(Region.US_EAST_1)
+				.build();
+
+		Map<String, String> authParameters = new HashMap<String, String>();
+		authParameters.put("REFRESH_TOKEN", refreshToken);
+		authParameters.put("SECRET_HASH", secretHash);
+		InitiateAuthRequest request = InitiateAuthRequest.builder().clientId("7enm2na5flqa00p3eicpjma8k3")
+				.authFlow("REFRESH_TOKEN_AUTH").authParameters(authParameters).build();
+		
+		InitiateAuthResponse response = cognitoClient.initiateAuth(request);
+		System.out.println(response);
+	}
+}
